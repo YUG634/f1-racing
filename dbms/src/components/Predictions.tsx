@@ -4,7 +4,7 @@ import { Target, Plus, TrendingUp, History, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils.ts';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://f1-backend.onrender.com/api';
 
 interface PredictionsProps {
   predictions: Prediction[];
