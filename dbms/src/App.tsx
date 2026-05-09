@@ -19,7 +19,7 @@ import Predictions from './components/Predictions.tsx';
 
 type View = 'dashboard' | 'teams' | 'drivers' | 'circuits' | 'races' | 'predictions';
 // API base URL - using proxy or direct
-const API_BASE_URL = 'https://f1-backend.onrender.com/api';
+const API_BASE_URL = 'https://f1-racing-c1im.onrender.com/api';
 
 export default function App() {
   const [activeView, setActiveView] = useState<View>('dashboard');
