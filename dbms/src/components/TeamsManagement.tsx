@@ -4,7 +4,7 @@ import { Plus, Trash2, Edit2, Search, Building2, MapPin, UserSquare2, X } from '
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils.ts';
 
-const API_BASE_URL = 'https://f1-backend.onrender.com/api';
+const API_BASE_URL = 'https://f1-racing-c1im.onrender.com/api';
 
 interface TeamsManagementProps {
   teams: Team[];
