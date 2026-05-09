@@ -8,9 +8,28 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// ============ API ENDPOINTS ============
+// ============ ROOT ROUTE FOR RENDER ============
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'F1 Racing API is running!',
+    status: 'online',
+    endpoints: {
+      teams: '/api/teams',
+      drivers: '/api/drivers',
+      circuits: '/api/circuits',
+      races: '/api/races',
+      predictions: '/api/predictions',
+      sessions: '/api/sessions'
+    }
+  });
+});
 
-// Teams
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ============ TEAMS ENDPOINTS ============
 app.get('/api/teams', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM teams ORDER BY name');
@@ -42,11 +61,10 @@ app.delete('/api/teams/:id', async (req, res) => {
   }
 });
 
-// Drivers - FIXED with lowercase column names
+// ============ DRIVERS ENDPOINTS ============
 app.post('/api/drivers', async (req, res) => {
   try {
     const { id, teamid, firstname, lastname, nationality, dob } = req.body;
-    
     const result = await db.query(
       'INSERT INTO drivers (id, teamid, firstname, lastname, nationality, dob) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [id, teamid, firstname, lastname, nationality, dob]
@@ -58,7 +76,6 @@ app.post('/api/drivers', async (req, res) => {
   }
 });
 
-// Get all drivers - FIXED with lowercase column names
 app.get('/api/drivers', async (req, res) => {
   try {
     const result = await db.query(`
@@ -73,7 +90,6 @@ app.get('/api/drivers', async (req, res) => {
   }
 });
 
-// Delete driver
 app.delete('/api/drivers/:id', async (req, res) => {
   try {
     await db.query('DELETE FROM drivers WHERE id = $1', [req.params.id]);
@@ -83,7 +99,7 @@ app.delete('/api/drivers/:id', async (req, res) => {
   }
 });
 
-// Circuits
+// ============ CIRCUITS ENDPOINTS ============
 app.get('/api/circuits', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM circuits ORDER BY name');
@@ -115,7 +131,7 @@ app.delete('/api/circuits/:id', async (req, res) => {
   }
 });
 
-// Races
+// ============ RACES ENDPOINTS ============
 app.get('/api/races', async (req, res) => {
   try {
     const result = await db.query(`
@@ -152,7 +168,7 @@ app.delete('/api/races/:id', async (req, res) => {
   }
 });
 
-// Predictions
+// ============ PREDICTIONS ENDPOINTS ============
 app.get('/api/predictions', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM predictions ORDER BY predictiontimestamp DESC');
@@ -185,7 +201,8 @@ app.delete('/api/predictions/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-// Sessions
+
+// ============ SESSIONS ENDPOINTS ============
 app.get('/api/sessions', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM sessions');
@@ -208,7 +225,8 @@ app.post('/api/sessions', async (req, res) => {
   }
 });
 
-// Start server
+// ============ START SERVER ============
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📡 API ready at https://your-backend.onrender.com/api/teams`);
 });
